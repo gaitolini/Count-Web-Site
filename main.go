@@ -14,7 +14,7 @@ var db *sql.DB
 
 func main() {
 	// String de conexão para usar o proxy local (localhost) ao invés do hostname Fly.io
-	// connStr := "postgres://postgres:4BSaG5SsurRao7G@localhost:5433/postgres?sslmode=disable"
+	//connStr := "postgres://postgres:4BSaG5SsurRao7G@localhost:5433/postgres?sslmode=disable"
 	connStr := "postgres://postgres:4BSaG5SsurRao7G@counterwebsitedb.flycast:5432/postgres?sslmode=disable"
 
 	var err error
@@ -46,6 +46,17 @@ func main() {
 }
 
 func contadorHandler(w http.ResponseWriter, r *http.Request) {
+	// Definir os cabeçalhos CORS para permitir o acesso de diferentes origens
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	// Verificar se é uma requisição OPTIONS, que é usada pelo navegador para o preflight
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
 	// Incrementa o contador no banco de dados
 	_, err := db.Exec(`UPDATE contador SET visitas = visitas + 1 WHERE id = 1`)
 	if err != nil {
