@@ -1,30 +1,49 @@
-# fly.toml app configuration file generated for countwebsite-bold-dust-2473 on 2024-10-30T21:48:35-03:00
+# fly.toml app configuration file generated for countwebsite on 2024-10-30T22:14:44-03:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'countwebsite-bold-dust-2473'
-primary_region = 'gru'
+app = "postgrecountwebview"
+primary_region = "gru"
 
 [build]
-  builder = 'paketobuildpacks/builder:base'
+  builder = "paketobuildpacks/builder:base"
 
 [env]
-  PORT = '8080'
-
-[[mounts]]
-  source = 'contador_data'
-  destination = '/app/data'
+  PORT = "8080"
+  DATABASE_URL = "postgres://postgres:vBAQeQ5KPHO2qX1@postgrecountwebview.internal:5432/postgres?sslmode=disable"
 
 [http_service]
   internal_port = 8080
   force_https = true
-  auto_stop_machines = 'stop'
+  auto_stop_machines = "stop"
   auto_start_machines = true
   min_machines_running = 0
-  processes = ['app']
+  processes = ["app"]
 
-[[vm]]
-  memory = '1gb'
-  cpu_kind = 'shared'
-  cpus = 1
+[metrics]
+  port = 8080
+  path = "/metrics"
+
+[experimental]
+  auto_rollback = true
+
+[[services]]
+  internal_port = 8080
+  protocol = "tcp"
+  [services.concurrency]
+    type = "connections"
+    hard_limit = 25
+    soft_limit = 20
+
+  [[services.ports]]
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
+
+  [[services.tcp_checks]]
+    interval = "15s"
+    timeout = "2s"

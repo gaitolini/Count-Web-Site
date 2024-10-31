@@ -7,28 +7,33 @@ import (
 	"log"
 	"net/http"
 
-	_ "modernc.org/sqlite" // Importa o driver SQLite que não requer CGO
+	_ "github.com/lib/pq" // Importa o driver PostgreSQL
 )
 
 var db *sql.DB
 
 func main() {
-	// Abre (ou cria) o banco de dados SQLite
+	// String de conexão para usar o proxy local (localhost) ao invés do hostname Fly.io
+	// connStr := "postgres://postgres:vBAQeQ5KPHO2qX1@localhost:5433/postgres?sslmode=disable"
+	connStr := "postgres://postgres:vBAQeQ5KPHO2qX1@postgrecountwebview.flycast:5433/postgres?sslmode=disable"
 	var err error
-	db, err = sql.Open("sqlite", "./contador.db")
+	db, err = sql.Open("postgres", connStr) // Nome do driver é "postgres"
 	if err != nil {
 		log.Fatalf("Erro ao abrir banco de dados: %v", err)
 	}
 	defer db.Close()
 
 	// Cria a tabela se não existir
-	_, err = db.Exec(`CREATE TABLE IF NOT EXISTS contador (id INTEGER PRIMARY KEY, visitas INTEGER)`)
+	_, err = db.Exec(`CREATE TABLE IF NOT EXISTS contador (
+        id SERIAL PRIMARY KEY,
+        visitas INTEGER DEFAULT 0
+    )`)
 	if err != nil {
 		log.Fatalf("Erro ao criar tabela: %v", err)
 	}
 
 	// Insere a primeira linha caso a tabela esteja vazia
-	_, err = db.Exec(`INSERT INTO contador (id, visitas) VALUES (1, 0) ON CONFLICT(id) DO NOTHING`)
+	_, err = db.Exec(`INSERT INTO contador (id, visitas) VALUES (1, 0) ON CONFLICT DO NOTHING`)
 	if err != nil {
 		log.Fatalf("Erro ao inserir dados iniciais: %v", err)
 	}
