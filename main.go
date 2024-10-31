@@ -14,8 +14,9 @@ var db *sql.DB
 
 func main() {
 	// String de conexão para usar o proxy local (localhost) ao invés do hostname Fly.io
-	// connStr := "postgres://postgres:vBAQeQ5KPHO2qX1@localhost:5433/postgres?sslmode=disable"
-	connStr := "postgres://postgres:vBAQeQ5KPHO2qX1@postgrecountwebview.flycast:5433/postgres?sslmode=disable"
+	// connStr := "postgres://postgres:4BSaG5SsurRao7G@localhost:5433/postgres?sslmode=disable"
+	connStr := "postgres://postgres:4BSaG5SsurRao7G@counterwebsitedb.flycast:5432/postgres?sslmode=disable"
+
 	var err error
 	db, err = sql.Open("postgres", connStr) // Nome do driver é "postgres"
 	if err != nil {

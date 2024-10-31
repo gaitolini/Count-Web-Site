@@ -3,7 +3,7 @@
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = "postgrecountwebview"
+app = "counterwebsitexyz"
 primary_region = "gru"
 
 [build]
@@ -11,7 +11,8 @@ primary_region = "gru"
 
 [env]
   PORT = "8080"
-  DATABASE_URL = "postgres://postgres:vBAQeQ5KPHO2qX1@postgrecountwebview.internal:5432/postgres?sslmode=disable"
+  DATABASE_URL = "postgres://postgres:4BSaG5SsurRao7G@counterwebsitedb.flycast:5432/postgres?sslmode=disable"
+
 
 [http_service]
   internal_port = 8080
