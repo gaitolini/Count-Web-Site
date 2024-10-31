@@ -84,8 +84,6 @@ O frontend que consome este backend está disponível no seguinte repositório: 
   <img src="https://github.com/user-attachments/assets/a019d3e6-5a04-4124-b42b-b5824d1f92d5" alt="image" width="300"/>
 </div>
 
-
-
 🚀 Feito com muito Go, Dockere Cloud por Anderson Gaitolini❤️.
 
 ## Agradecimentos 🙌
